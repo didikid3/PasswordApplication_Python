@@ -1,34 +1,37 @@
 
-#import passwordProject
-"""
-verifyingPass(password)
-    -returns true or false
-
-forgetPassword(username, ans1, ans2)
-    -ask security question
-    -call createPassword
-    -sets the new password
-
-
-
-"""
-
-
 def home(user):
-    dataList = getData(user)
+    userInput = ""
+    while userInput != 3:
 
-    count = 0
-    tmpString = ""
-    print("APPLICATION\t\tUsername\t\tPassword")
-    for line in dataList:
-        if count != 2:
-            tmpString += line.strip() + "\t\t"
-            count += 1
-        else:
-            tmpString += line.strip()
-            print(tmpString)
-            tmpString = ""
-            count = 0
+        dataList = getData(user)
+
+        count = 0
+        tmpString = ""
+        print("APPLICATION\t\tUsername\t\tPassword")
+        for line in dataList:
+            if count != 2:
+                tmpString += line.strip() + "\t\t"
+                count += 1
+            else:
+                tmpString += line.strip()
+                print(tmpString)
+                tmpString = ""
+                count = 0
+
+        
+        print("1) Add Data")
+        print("2) Change Password")
+        print("3) Log Out")
+        userInput = int(input())
+
+        if userInput == 1:
+            application = input("What App is this for?")
+            userName = input("The username for " + application + ": ")
+            password = input("The password for " + application + ": ")
+            addData(user, application, userName, password)
+        elif userInput == 2:
+            changePassword(user)
+        
 
 def getData(user):
     filePath = user + "Data.txt"
@@ -48,7 +51,7 @@ def addData(user, app, userName, password):
     
 def changePassword(username):
     securityPath = username + "Security.txt"
-    accountsPath = "accounts.txt"
+    accountsPath = "Accounts.txt"
 
     oldPassword = input("Enter your old password")
 
@@ -57,10 +60,10 @@ def changePassword(username):
 
     userNameLocation = 0
     for line in data:
-        if line == username:
+        if line.strip() == username:
             break
         userNameLocation += 1
-    if(oldPassword != data[userNameLocation + 1]):
+    if oldPassword != data[userNameLocation + 1].strip():
         print("Old password is wrong!")
         return False
     newPassword = input("Enter the new password")
@@ -70,7 +73,3 @@ def changePassword(username):
         files.writelines(data)
     return True
 
-
-username = "test1"
-#addData(username, "app2", "app2User", "app2PW")
-home(username)

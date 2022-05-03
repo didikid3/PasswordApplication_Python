@@ -1,6 +1,0 @@
-app1
-app1User
-app1PW
-app2
-app2User
-app2PW

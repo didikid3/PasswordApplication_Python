@@ -1,22 +1,34 @@
-#Function for user login
-def verifyingPass(password):
-    #ask user to renter the password created
-    #use this function in create password
-    reenter = input("re-enter the password:")
-    return (reenter == password)
+import homepage
 
+
+def userNameIndex(username):
+    with open("Accounts.txt", 'r') as file:
+        data = file.readlines()
+    usernameLocation = 0
+
+    for line in data:
+        if line.strip() == username:
+            found = True
+            break
+        usernameLocation += 1
+    return usernameLocation
+
+#When Given a username associated with an account
+#Register a new password into Accounts.txt
 def createPassword(username):
-    fileOut = open("Accounts.txt", 'a')
-    stringOfalph = "abcdefghijklmnopqrstuvwxyz"
+
+    stringOfalph = "abcdefghijklmnopqrstuvwxyz".upper()
     stringOfSpecial = "!@#$%^&*()"
     stringOfNum = "0123456789"
 
     boolForNum = False
     boolForCap = False
-    boolForSpecial = False
 
-    while(boolForSpecial != True and boolForCap != True and boolForNum != True):
-        password = input("Enter a password(Min Length 7, one Number, one Capital and One special Character): ")
+    #Run Through a continuous loop until a valid password is created
+    #Must have num, upperChar, and SpecialChar
+    #Min Length 7
+    while(boolForCap != True or boolForNum != True):
+        password = input("Enter a password(Min Length 7, one Number, one Capital): ")
         while (len(password) < 7):
             password = input("Password not long enough, try again: ")
 
@@ -25,10 +37,6 @@ def createPassword(username):
                 if (password[i] == stringOfalph[j]):
                     boolForCap = True
 
-        for i in range(len(password)):
-            for j in range(len(stringOfSpecial)):
-                if (password[i] == stringOfSpecial[j]):
-                    boolForSpecial = True
 
         for i in range(len(password)):
             for j in range(len(stringOfNum)):
@@ -39,12 +47,27 @@ def createPassword(username):
             print("No number Found")
         if(boolForCap != True):
             print("No capital Found")
-        if (boolForSpecial != True):
-            print("No Special Found")
-    #identify location
-    fileOut.write(password)
 
-    #calls verifying password
+
+    #Password should be verified now
+    password = password + "\n"
+
+    #Find location of username, directly below should be the password
+    with open("Accounts.txt", 'r') as file:
+        data = file.readlines()
+    usernameLocation = userNameIndex(username)
+
+    #If new user, add a new line
+    if usernameLocation + 1 > len(data) - 1:
+        data.append(password)
+    else:
+        data[usernameLocation + 1] = password
+
+    #Write data back to file
+    with open("Accounts.txt", 'w') as file:
+        file.writelines(data)
+        
+
 
 def createAccount():
     #create username
@@ -53,122 +76,80 @@ def createAccount():
     fileOut = open("Accounts.txt", 'a')
     fileOut.write(username)
     fileOut.close()
-    #calls create password
-    #calls verifying password
-    #create Security answers
-    #writes the username and password into a file
-    #create dictionary zip username and password together
-def createSecurityAnswer(username):
+
+    createPassword(username.strip())
+
+    SecurityQuestionAnswers(username.strip())
+
+    userData = username.strip() + "Data.txt"
+    tmp = open(userData,'w')
+    tmp.close()
+
+
+def SecurityQuestionAnswers(username):
     A1 = input("What is your homecountry? ")
     A2 = input("What is your favorite hobby? ")
-    filePath = username + "Securityans.txt"
-    fileOut = open(filePath, 'a')
     x = A1 + '\n'
     x2 = A2 + '\n'
-
+    
+    filePath = username + "Security.txt"
+    fileOut = open(filePath, 'w')
+    
     fileOut.write(x)
     fileOut.write(x2)
     fileOut.close()
-def Login():
-    #Enter User name and password 3 tries
-    print("Logged in successfully welcome")
 
-def changePassword():
-    #calls create Password using username as key
+    
 
 def forgotPassword(username):
     #ask for verifying security questions
     ans1 = input("What is your homecountry? ")
     ans2 = input("What is your favorite hobby? ")
-    x = username + "security.txt"
+    
+    x = username + "Security.txt"
     fileIn = open(x, 'r')
-    q1 = fileIn.readline()
-    q2 = fileIn.readline()
+    q1 = fileIn.readline().strip()
+    q2 = fileIn.readline().strip()
     fileIn.close()
+    
     if(q1  == ans1 and q2 == ans2):
-        #call createPassword
+        createPassword(username)
     else:
         print("Security question answers are wrong")
 
-#STOP HERE!
+def Login():
+    usrInput = 0
+    while usrInput != 4:
+        print("LOGIN PAGE")
+        print("1) Create Account")
+        print("2) Forgot Password")
+        print("3) Login")
+        print("4) Exit")
 
-def login(d):
-    #boolean value for when person successfully logs in
-    unlock = False
-    #Loop to continue to find username
-    while True:
-        username = input("Enter a username: ")
-        if username in d.keys() :
-            #Counter to increment count for tries
-            counter = 0
-            # two conditions one for checking pass and username correct and counter
-            while counter < 3 and not unlock:
-                password = input("Enter a password: ")
-                if password == d[username]:
-                    unlock = True
+        usrInput = int(input())
+
+        if(usrInput == 1):
+            createAccount()
+        elif(usrInput == 2):
+            input2 = input("What was the username: ")
+            forgotPassword(input2)
+        elif(usrInput == 3):
+            inputUsername = input("Username: ")
+            inputPassword = input("Password: ")
+            
+            with open("Accounts.txt", 'r') as file:
+                data = file.readlines()
+            usernameLocation = userNameIndex(inputUsername)
+
+            if usernameLocation > len(data) - 1:
+                print("failed login attempt")
+            else:
+                if inputPassword == data[usernameLocation + 1].strip():
+                    print("logged in!")
+                    homepage.home(inputUsername)
                 else:
-                    counter += 1
-                    print("Retry password")
-            if unlock == True:
-                print("Successfully Logged in")
-                break
+                    print("failed login attempt")
 
-    print("Admin is", username)
-    yOrN = input("Do you want to add user yes or no: ")
-    if yOrN == 'yes':
-        print("Old Users: ", d)
-        addUser(d)
-        print("New dictionary: ", d)
-    yOrN2 = input("Do you want to change password yes or no: ")
-
-    if yOrN2 == 'yes':
-        print("Old Passwords: ", d)
-        changePass(d)
-        print("New dictionary: ", d)
-
-def changePass(d):
-    #entering a username key to access password
-    username = input("Enter username for password change: ")
-    #changing the password for the specific username
-    d[username] = input("New password: ")
-
-def addUser(d):
-    #entering a new username and new password
-    newUser = input("Enter new username: ")
-    newPassword = input("Enter new password: ")
-    #adding it into the dictionary
-    d.update({newUser: newPassword})
-
-def main():
-    stringOfalph = "abcdefghijklmnopqrstuvwxyz"
-    stringOfSpecial = "!@#$%^&*()"
-
-    # creating set of usernames
-    setOfNames = {"Alex", "Betty", "Kim"}
-
-    listOfPass = []
-    print("Create a username and password, enter list of password ")
-
-    for i in range(len(setOfNames)):
-        password = input("Enter a password(Min Length 15, one Capital and One special Character): ")
-
-        if(len(password) < 7):
-            print("Try again")
-        for i in range(len(password)):
-            for j in range(len(stringOfalph)):
-                if(password[i] == stringOfalph[j]):
-                    return True
-        for i in range(len(password)):
-            for j in range(len(stringOfSpecial)):
-                if (password[i] == stringOfSpecial[j]):
-                    return True
-
-        listOfPass.append(password)
-    #create the dictonary
-    users = dict(zip(list(setOfNames), listOfPass))
-
-    print(users)
-    login(users)
+Login()
 
 
-main()

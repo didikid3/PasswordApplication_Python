@@ -1,3 +1,10 @@
+#Credit to:
+#GeeksForGeeks
+#Avi Kak at Purdue
+#Adam Berent
+#Femi Onewin
+#https://github.com/boppreh/aes
+
 def hex2bin(s):
     mp = {'0' : "0000",
           '1' : "0001",

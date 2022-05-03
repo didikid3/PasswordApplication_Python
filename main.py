@@ -1,5 +1,7 @@
 import homepage
+import os
 
+relativePath = os.path.join(os.path.dirname(__file__), 'users')
 
 def userNameIndex(username):
     with open("Accounts.txt", 'r') as file:
@@ -82,6 +84,7 @@ def createAccount():
     SecurityQuestionAnswers(username.strip())
 
     userData = username.strip() + "Data.txt"
+    userData = os.path.join(relativePath, userData)
     tmp = open(userData,'w')
     tmp.close()
 
@@ -93,6 +96,7 @@ def SecurityQuestionAnswers(username):
     x2 = A2 + '\n'
     
     filePath = username + "Security.txt"
+    filePath = os.path.join(relativePath, filePath)
     fileOut = open(filePath, 'w')
     
     fileOut.write(x)
@@ -107,6 +111,7 @@ def forgotPassword(username):
     ans2 = input("What is your favorite hobby? ")
     
     x = username + "Security.txt"
+    x = os.path.join(relativePath, x)
     fileIn = open(x, 'r')
     q1 = fileIn.readline().strip()
     q2 = fileIn.readline().strip()
@@ -150,6 +155,9 @@ def Login():
                 else:
                     print("failed login attempt")
 
+
+if not os.path.exists(relativePath):
+    os.makedirs(relativePath)
 Login()
 
 

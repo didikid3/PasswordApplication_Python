@@ -1,3 +1,5 @@
+import os
+relativePath = os.path.join(os.path.dirname(__file__), 'users')
 
 def home(user):
     userInput = ""
@@ -35,12 +37,14 @@ def home(user):
 
 def getData(user):
     filePath = user + "Data.txt"
+    filePath = os.path.join(relativePath, filePath)
     with open(filePath, 'r') as file:
         data = file.readlines()
     return data
 
 def addData(user, app, userName, password):
     filePath = user + "Data.txt"
+    filePath = os.path.join(relativePath, filePath)
 
     fileOut = open(filePath, 'a')
     text = app +'\n' + userName + '\n' + password + '\n'
@@ -50,7 +54,6 @@ def addData(user, app, userName, password):
 
     
 def changePassword(username):
-    securityPath = username + "Security.txt"
     accountsPath = "Accounts.txt"
 
     oldPassword = input("Enter your old password")

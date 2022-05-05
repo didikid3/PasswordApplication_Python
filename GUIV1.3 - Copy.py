@@ -27,6 +27,7 @@ def createPassword(username,passwordUser):
     stringOfNum = "0123456789"
 
     boolForNum = False
+    boolForSpec = False
     boolForCap = False
 
     #Run Through a continuous loop until a valid password is created
@@ -38,6 +39,10 @@ def createPassword(username,passwordUser):
             if (password[i] == stringOfalph[j]):
                 boolForCap = True
 
+    for i in range(len(password)):
+        for j in range(len(stringOfSpecial)):
+            if (password[i] == stringOfSpecial[j]):
+                boolForSpec = True
 
     for i in range(len(password)):
         for j in range(len(stringOfNum)):
@@ -46,7 +51,7 @@ def createPassword(username,passwordUser):
 
     if len(password) < 7:
         return False
-    if boolForCap != True and boolForNum != True:
+    if boolForCap != True and boolForNum != True and boolForSpec != True:
         return False
 
 
@@ -80,7 +85,7 @@ def newPasswordNotValid():
     password_error_screen = Toplevel(screen)
     password_error_screen.title("Error")
     password_error_screen.geometry("300x100")
-    Label(password_error_screen, text= "Length less than seven or no capital letter or no Number").pack()
+    Label(password_error_screen, text= "One of the following was no met:\nLength less than 7\nNo Capital Letter\nNo Number\nNo Special Character").pack()
     Button(password_error_screen, text= "OK", command=delete_pass_error_window).pack()
 
 #Creates Accounts.txt if it does not exist withing directory and stores new account info
@@ -326,7 +331,6 @@ def login():
 def main_window():
     global screen
     
-
     if not os.path.exists(relativePath):
         os.makedirs(relativePath)
     

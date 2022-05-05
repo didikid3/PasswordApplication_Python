@@ -305,12 +305,41 @@ def verify_login():
     except FileNotFoundError:
         messagebox.showinfo(title="Uh oh!", message="This file does not contain any account information. Please ensure that an account has been previously created in this directory.")
 
+def recoverPasswordVerify():
+    
+
+    
 #Will take user to a screen where they will enter their username
 #Upon username verification they will enter their security questions in a pop up window
 #Upon verification of the questions they will be told their password
 #CURRENTLY UNDEFINED
 def recover_password():
-    print() #Placeholder
+    global recovery_screen, verify_user, verify_color, verify_restaurant, username_attempt, color_attempt, restaurant_attempt
+
+    recovery_screen = Toplevel(screen)
+    recovery_screen.title("Forgot Password")
+    recovery_screen.geometry("400x350")
+
+    verify_user = StringVar()
+    verify_color = StringVar()
+    verify_restaurant = StringVar()
+    
+    Label(recovery_screen, text="Please enter the username").pack()
+    Label(recovery_screen, text="").pack()
+    username_attempt = Entry(recovery_screen, textvariable = verify_user).pack()
+    
+    Label(recovery_screen, text"What is your favorite color?").pack()
+    Label(recovery_screen, text="").pack()
+    color_attempt = Entry(recovery_screen, textvariable = verify_color).pack()
+
+    Label(recovery_screen, text"What is your favorite restaurant?").pack()
+    Label(recovery_screen, text="").pack()
+    restaurant_attempt = Entry(recovery_screen, textvariable = verify_restaurant).pack()
+
+    Label(recovery_screen, text="").pack()
+
+    Button(recovery_screen, text="Recover My Password", width=15, height=1, command = recoverPasswordVerify()).pack()
+    
 
 #Login Info Page
 #Displays Username and Password fields alone with Log In and Forgot Password buttons

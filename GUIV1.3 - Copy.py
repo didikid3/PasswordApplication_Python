@@ -7,6 +7,7 @@ import os
 import homepage
 import main
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
+key = "AABB09182736CCDD"
 
 def userNameIndex(username):
     with open("Accounts.txt", 'r') as file:
@@ -60,7 +61,7 @@ def createPassword(username,passwordUser):
     account_file.close()
 
     #Password should be verified now
-    password = password + "\n"
+    password = DES.DES2Encrypt(password) + "\n"
 
     #Find location of username, directly below should be the password
     with open("Accounts.txt", 'r') as file:

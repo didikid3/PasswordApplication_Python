@@ -1,6 +1,8 @@
 import os
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
 
+#Given the list of user data
+#Return a user's data formatted into 3 lists
 def getDataLists(data):
     application = []
     usernames = []
@@ -53,7 +55,7 @@ def home(user):
         elif userInput == 2:
             changePassword(user)
         
-
+#Returns the array containing user's data
 def getData(user):
     filePath = user + "Data.txt"
     filePath = os.path.join(relativePath, filePath)
@@ -61,6 +63,8 @@ def getData(user):
         data = file.readlines()
     return data
 
+#Given the user, and the new details to add
+#Insert into user's file the new data
 def addData(user, app, userName, password):
     filePath = user + "Data.txt"
     filePath = os.path.join(relativePath, filePath)
@@ -70,6 +74,8 @@ def addData(user, app, userName, password):
     fileOut.write(text)
     fileOut.close()
 
+#Given specific index locations of data
+#Remove the data associate with the index
 def removeData(user, indexes):
     removeList = []
     for ind in indexes:
@@ -87,7 +93,10 @@ def removeData(user, indexes):
         for index, line in enumerate(data):
             if index not in removeList:
                 file.write(line)
-    
+
+#Old ChangePassword
+#Overwritten version in GUI file
+#May be used if want to run text based
 def changePassword(username):
     accountsPath = "Accounts.txt"
 

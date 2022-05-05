@@ -3,6 +3,8 @@ import os
 
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
 
+#Given a username
+#Return the index location from the Accounts.txt
 def userNameIndex(username):
     with open("Accounts.txt", 'r') as file:
         data = file.readlines()
@@ -15,6 +17,9 @@ def userNameIndex(username):
         usernameLocation += 1
     return usernameLocation
 
+#OLD CREATEPASSWORD
+#Overwritten in GUI
+#May be used if want to run a text based version
 #When Given a username associated with an account
 #Register a new password into Accounts.txt
 def createPassword(username):
@@ -70,7 +75,11 @@ def createPassword(username):
         file.writelines(data)
         
 
-
+#Texted based implementation for creating new user
+#3 files will be written
+#Account details in Accounts.txt(global)
+#<username>Data.txt for application contents
+#<username>Security.txt for security question contents
 def createAccount():
     #create username
     username = input("Enter your username")
@@ -89,6 +98,8 @@ def createAccount():
     tmp.close()
 
 
+#Given the answers to the security questions for a specific user
+#Write answers to specific user's file
 def SecurityQuestionAnswers(username, x, x2):
     
     filePath = username + "Security.txt"
@@ -100,7 +111,8 @@ def SecurityQuestionAnswers(username, x, x2):
     fileOut.close()
 
     
-
+#Texted based implementation to reset a user's password
+#Given they answer the security questions correctly
 def forgotPassword(username):
     #ask for verifying security questions
     ans1 = input("What is your homecountry? ")
@@ -118,6 +130,8 @@ def forgotPassword(username):
     else:
         print("Security question answers are wrong")
 
+
+#Main function for text based program
 def Login():
     usrInput = 0
     while usrInput != 4:

@@ -191,8 +191,7 @@ def encrypt(pt, rkb, rk):
      
     # Initial Permutation
     pt = permute(pt, initial_perm, 64)
-    print("After initial permutation", bin2hex(pt))
-     
+         
     # Splitting
     left = pt[0:32]
     right = pt[32:64]
@@ -221,7 +220,7 @@ def encrypt(pt, rkb, rk):
         # Swapper
         if(i != 15):
             left, right = right, left
-        print("Round ", i + 1, " ", bin2hex(left), " ", bin2hex(right), " ", rk[i])
+        
      
     # Combination
     combine = left + right
@@ -231,7 +230,7 @@ def encrypt(pt, rkb, rk):
     return cipher_text
 
 
-def AES2Encrypt(plainText, userKey): 
+def DES2Encrypt(plainText, userKey): 
     pt = plainText #"123456ABCD132536"
     key = userKey #"AABB09182736CCDD"
      
@@ -288,13 +287,13 @@ def AES2Encrypt(plainText, userKey):
         rkb.append(round_key)
         rk.append(bin2hex(round_key))
      
-    print("Encryption")
+    
     cipher_text = bin2hex(encrypt(pt, rkb, rk))
-    print("Cipher Text : ",cipher_text)
+    
     return cipher_text
 
 
-def AES2Decrypt(cipher_text, userKey): 
+def DES2Decrypt(cipher_text, userKey): 
     key = userKey #"AABB09182736CCDD"
      
     # Key generation
@@ -351,16 +350,39 @@ def AES2Decrypt(cipher_text, userKey):
         rk.append(bin2hex(round_key))
      
          
-    print("Decryption")
+    
     rkb_rev = rkb[::-1]
     rk_rev = rk[::-1]
     text = bin2hex(encrypt(cipher_text, rkb_rev, rk_rev))
-    print("Plain Text : ",text)
+    
     return text
 
-print("initial: " + "123456ABCD132536")
-vlau = AES2Encrypt("123456ABCD132536","AABB09182736CCDD")
-print(vlau)
+def encryptHelper(plain_text, key):
+    size = len(plain_text)
+    padding = 8 - (size % 8)
 
-v2lau = AES2Decrypt(vlau,"AABB09182736CCDD")
+    modified = plain_text
+    for i in range(padding):
+        modified += '0'
 
+    hexString = ""
+    for letter in modified:
+        hexString += format(ord(letter), "x").upper()
+
+    encryptedText = ""
+    recur = int(len(modified)/8)
+
+    for i in range( recur ):
+        encryptedText += DES2Encrypt(hexString[i*16 : ((i+1)*16)],key)
+    print(encryptedText)
+    return encryptedText
+
+def decryptHelper(cipher_text, key):
+    plainHex = DES2Decrypt(cipher_text,key)
+    print(plainHex)
+    print(bytes.fromhex(plainHex).decode('utf-8'))
+    
+
+
+x = encryptHelper("A.a","AABB09182736CCDD")
+decryptHelper(x,"AABB09182736CCDD")

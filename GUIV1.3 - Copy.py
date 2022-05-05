@@ -187,11 +187,12 @@ def display_info():
     #adds data entry
     def add_record():
         global entry_counter
-        
         info_tree.insert(parent="", index="end", iid=entry_counter, text="", values=(app_box.get(), user_box.get(), pass_box.get()))
+        homepage.addData(username_check, app_box.get(), user_box.get(), pass_box.get())
         app_box.delete(0, END)
         user_box.delete(0, END)
         pass_box.delete(0, END)
+        
     #removes all data entries
     def clear_records():
         for record in info_tree.get_children():

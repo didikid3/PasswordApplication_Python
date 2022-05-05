@@ -197,6 +197,12 @@ def display_info():
     def clear_records():
         for record in info_tree.get_children():
             info_tree.delete(record)
+        filePath = username_check + "Data.txt"
+        filePath = os.path.join(relativePath, filePath)
+
+        with open(filePath, 'a') as file:
+            file.truncate(0)
+            
     #removes highlighted data entry
     def remove_selected():
         for record in info_tree.selection():

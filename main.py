@@ -89,18 +89,14 @@ def createAccount():
     tmp.close()
 
 
-def SecurityQuestionAnswers(username):
-    A1 = input("What is your homecountry? ")
-    A2 = input("What is your favorite hobby? ")
-    x = A1 + '\n'
-    x2 = A2 + '\n'
+def SecurityQuestionAnswers(username, x, x2):
     
     filePath = username + "Security.txt"
     filePath = os.path.join(relativePath, filePath)
     fileOut = open(filePath, 'w')
     
-    fileOut.write(x)
-    fileOut.write(x2)
+    fileOut.write(x + '\n')
+    fileOut.write(x2 + '\n')
     fileOut.close()
 
     
@@ -155,9 +151,5 @@ def Login():
                 else:
                     print("failed login attempt")
 
-
-if not os.path.exists(relativePath):
-    os.makedirs(relativePath)
-Login()
 
 

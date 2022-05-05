@@ -6,6 +6,8 @@ from tkinter import messagebox, ttk
 import os
 import homepage
 import main
+import DES
+
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
 key = "AABB09182736CCDD"
 
@@ -61,7 +63,7 @@ def createPassword(username,passwordUser):
     account_file.close()
 
     #Password should be verified now
-    password = DES.DES2Encrypt(password) + "\n"
+    password = DES.encryptHelper(password,key) + "\n"
 
     #Find location of username, directly below should be the password
     with open("Accounts.txt", 'r') as file:
@@ -102,6 +104,10 @@ def register_user():
         newPasswordNotValid()
     else:
         main.SecurityQuestionAnswers(username_info, color_info, restaurant_info)
+        userData = username_info + "Data.txt"
+        userData = os.path.join(relativePath, userData)
+        tmp = open(userData,'w')
+        tmp.close()
         #closes registration window and displays success message
         registration_screen.destroy()
         messagebox.showinfo(title="Success!", message="Account successfully created!")
@@ -182,7 +188,7 @@ def display_info():
     #Group information in tuples to pass for ttk.Treeview
     userDatas = []
     for appItem, userItem, passwordItem in zip(applicationsList, usernamesList, passwordsList):
-        userDatas.append((appItem, userItem, passwordItem))
+        userDatas.append((appItem, userItem, DES.decryptHelper(passwordItem,key)))
     for userData in userDatas:
         info_tree.insert(parent="", index="end", iid=entry_counter, text="", values= userData)
         entry_counter += 1
@@ -194,7 +200,7 @@ def display_info():
     def add_record():
         global entry_counter
         info_tree.insert(parent="", index="end", iid=entry_counter, text="", values=(app_box.get(), user_box.get(), pass_box.get()))
-        homepage.addData(username_check, app_box.get(), user_box.get(), pass_box.get())
+        homepage.addData(username_check, app_box.get(), user_box.get(), DES.encryptHelper(pass_box.get(),key))
         app_box.delete(0, END)
         user_box.delete(0, END)
         pass_box.delete(0, END)
@@ -282,7 +288,7 @@ def password_not_recognized():
 def verify_login():
     global username_check
     username_check = verify_user.get()
-    password_check = verify_password.get()
+    password_check = DES.encryptHelper(verify_password.get(),key)
     try:
         with open("Accounts.txt") as account_file:
             account_list = account_file.readlines()             #places account pairs into list in order to verify information

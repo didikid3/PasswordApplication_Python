@@ -1,7 +1,9 @@
 import homepage
+import DES
 import os
 
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
+key = "AABB09182736CCDD"
 
 #Given a username
 #Return the index location from the Accounts.txt
@@ -106,8 +108,8 @@ def SecurityQuestionAnswers(username, x, x2):
     filePath = os.path.join(relativePath, filePath)
     fileOut = open(filePath, 'w')
     
-    fileOut.write(x + '\n')
-    fileOut.write(x2 + '\n')
+    fileOut.write(DES.encryptHelper(x,key)  + '\n')
+    fileOut.write(DES.encryptHelper(x2,key) + '\n')
     fileOut.close()
 
     

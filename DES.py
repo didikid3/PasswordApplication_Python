@@ -363,7 +363,7 @@ def encryptHelper(plain_text, key):
 
     modified = plain_text
     for i in range(padding):
-        modified += '0'
+        modified += '.'
 
     hexString = ""
     for letter in modified:
@@ -374,15 +374,19 @@ def encryptHelper(plain_text, key):
 
     for i in range( recur ):
         encryptedText += DES2Encrypt(hexString[i*16 : ((i+1)*16)],key)
-    print(encryptedText)
     return encryptedText
+
+def removePadding(text):
+    result = ""
+    for char in text:
+        if char != '.':
+            result += char
+    return result
 
 def decryptHelper(cipher_text, key):
     plainHex = DES2Decrypt(cipher_text,key)
-    print(plainHex)
-    print(bytes.fromhex(plainHex).decode('utf-8'))
-    
+
+    pt = bytes.fromhex(plainHex).decode('utf-8')
+    return removePadding(pt)
 
 
-x = encryptHelper("A.a","AABB09182736CCDD")
-decryptHelper(x,"AABB09182736CCDD")

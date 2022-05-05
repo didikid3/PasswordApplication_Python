@@ -1,6 +1,25 @@
 import os
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
 
+def getDataLists(data):
+    application = []
+    usernames = []
+    passwords = []
+    count = 0
+    for line in data:
+        if count == 0:
+            application.append(line.strip())
+            count += 1
+        elif count == 1:
+            usernames.append(line.strip())
+            count += 1
+        else:
+            passwords.append(line.strip())
+            count = 0
+
+    return application,usernames,passwords
+
+
 def home(user):
     userInput = ""
     while userInput != 3:

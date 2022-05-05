@@ -2,7 +2,9 @@
 #Last Edit: 5/4/2022
 from tkinter import *
 from tkinter import messagebox, ttk
+
 import os
+import homepage
 import main
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
 
@@ -31,26 +33,19 @@ def createPassword(username,passwordUser):
     #Must have num, upperChar, and SpecialChar
     #Min Length 7
     password = passwordUser
-    if boolForCap != True or boolForNum != True:
-
-        """
-        ERROR PASSWORD NOT LONG ENOUGH
-        """
-        #while (len(password) < 7):
-            #password = input("Password not long enough, try again: ")
-
-        for i in range(len(password)):
-            for j in range(len(stringOfalph)):
-                if (password[i] == stringOfalph[j]):
-                    boolForCap = True
+    for i in range(len(password)):
+        for j in range(len(stringOfalph)):
+            if (password[i] == stringOfalph[j]):
+                boolForCap = True
 
 
-        for i in range(len(password)):
-            for j in range(len(stringOfNum)):
-                if (password[i] == stringOfNum[j]):
-                    boolForNum = True
+    for i in range(len(password)):
+        for j in range(len(stringOfNum)):
+            if (password[i] == stringOfNum[j]):
+                boolForNum = True
 
-
+    if len(password) < 7:
+        return False
     if boolForCap != True and boolForNum != True:
         return False
 
@@ -72,7 +67,7 @@ def createPassword(username,passwordUser):
         data.append(password)
     else:
         data[usernameLocation + 1] = password
-    print("here1")
+
     #Write data back to file
     with open("Accounts.txt", 'w') as file:
         file.writelines(data)
@@ -85,7 +80,7 @@ def newPasswordNotValid():
     password_error_screen = Toplevel(screen)
     password_error_screen.title("Error")
     password_error_screen.geometry("300x100")
-    Label(password_error_screen, text= "No capital letter or no Number").pack()
+    Label(password_error_screen, text= "Length less than seven or no capital letter or no Number").pack()
     Button(password_error_screen, text= "OK", command=delete_pass_error_window).pack()
 
 #Creates Accounts.txt if it does not exist withing directory and stores new account info
@@ -173,15 +168,26 @@ def display_info():
     info_tree.heading("Application", text="Application", anchor=W)
     info_tree.heading("Username", text="Username", anchor=W)
     info_tree.heading("Password", text="Password", anchor=W)
-    #Populate Treeview
-    info_tree.insert(parent="", index="end", iid=entry_counter, text="", values=("Work Computer", "John", "Python")) #filler data
+
+    #getData retrieves a list with contents from user data file
+    #getDataLists interprets the data to yield 3 seprate lists
+    applicationsList, usernamesList, passwordsList = homepage.getDataLists( homepage.getData(username_check) )
+
+    #Group information in tuples to pass for ttk.Treeview
+    userDatas = []
+    for appItem, userItem, passwordItem in zip(applicationsList, usernamesList, passwordsList):
+        userDatas.append((appItem, userItem, passwordItem))
+    for userData in userDatas:
+        info_tree.insert(parent="", index="end", iid=entry_counter, text="", values= userData)
+        entry_counter += 1
+    
     info_tree.pack()
     
     '''Note: add database interaction for below functions'''
     #adds data entry
     def add_record():
         global entry_counter
-        entry_counter += 1      #adds counter first right now because of filler data. will change once the treeview reads from data text file
+        
         info_tree.insert(parent="", index="end", iid=entry_counter, text="", values=(app_box.get(), user_box.get(), pass_box.get()))
         app_box.delete(0, END)
         user_box.delete(0, END)

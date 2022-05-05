@@ -70,7 +70,23 @@ def addData(user, app, userName, password):
     fileOut.write(text)
     fileOut.close()
 
+def removeData(user, indexes):
+    removeList = []
+    for ind in indexes:
+        removeList.append(int(ind)*3)
+        removeList.append(int(ind)*3 + 1)
+        removeList.append(int(ind)*3 + 2)
 
+    filePath = user + "Data.txt"
+    filePath = os.path.join(relativePath, filePath)
+
+    with open(filePath, 'r') as file:
+        data = file.readlines()
+
+    with open(filePath, 'w') as file:
+        for index, line in enumerate(data):
+            if index not in removeList:
+                file.write(line)
     
 def changePassword(username):
     accountsPath = "Accounts.txt"

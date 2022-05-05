@@ -192,6 +192,7 @@ def display_info():
         app_box.delete(0, END)
         user_box.delete(0, END)
         pass_box.delete(0, END)
+        entry_counter += 1
         
     #removes all data entries
     def clear_records():
@@ -202,11 +203,15 @@ def display_info():
 
         with open(filePath, 'a') as file:
             file.truncate(0)
+        entry_counter = 0
             
     #removes highlighted data entry
     def remove_selected():
+        homepage.removeData(username_check, info_tree.selection())
         for record in info_tree.selection():
             info_tree.delete(record)
+            entry_counter -= 1
+        
 
         
     #Add Entry Frame

@@ -305,40 +305,82 @@ def verify_login():
     except FileNotFoundError:
         messagebox.showinfo(title="Uh oh!", message="This file does not contain any account information. Please ensure that an account has been previously created in this directory.")
 
-def recoverPasswordVerify():
+def destroyRecoveryFailedScreen():
+    recoveryErrorScreen.destroy()
+
+def recoveryFailed():
+    global recoveryErrorScreen
+    recoveryErrorScreen = Toplevel(screen)
+    recoveryErrorScreen.title("Error")
+    recoveryErrorScreen.geometry("300x100")
+    Label(recoveryErrorScreen, text= "Incorrect Answers").pack()
+    Button(recoveryErrorScreen, text= "OK", command=destroyRecoveryFailedScreen).pack()
+
+def destroyPasswordPassed():
+    recoveryPassScreen.destroy()
     
+def recoveryPasswordPassed(password):
+    global recoveryPassScreen
+    recoveryPassScreen = Toplevel(screen)
+    recoveryPassScreen.title("Your Password")
+    recoveryPassScreen.geometry("300x100")
+    Label(recoveryPassScreen, text= password).pack()
+    Button(recoveryPassScreen, text= "OK", command=destroyPasswordPassed).pack()
+
+def recoverPasswordVerify():
+    with open("Accounts.txt", 'r') as file:
+        data = file.readlines()
+    userT = recovery_user.get()
+    colorT = recovery_color.get()
+    restaurantT = recovery_restaurant.get()
+
+    found = False
+    for line in data:
+        if line.strip() ==  userT:
+            found = True
+    if found == True:
+        location = userNameIndex(userT)
+        pathSecurity = os.path.join(relativePath, userT+"Security.txt")      
+        with open(pathSecurity, 'r') as file:
+            answers = file.readlines()
+        if DES.decryptHelper(answers[0].strip(),key) == colorT and DES.decryptHelper(answers[1].strip(),key) == restaurantT:
+            recoveryPasswordPassed(DES.decryptHelper(data[location + 1].strip(),key))
+        else:
+            recoveryFailed()
+    else:
+        recoveryFailed()
 
     
 #Will take user to a screen where they will enter their username
 #Upon username verification they will enter their security questions in a pop up window
 #Upon verification of the questions they will be told their password
-#CURRENTLY UNDEFINED
+
 def recover_password():
-    global recovery_screen, verify_user, verify_color, verify_restaurant, username_attempt, color_attempt, restaurant_attempt
+    global recovery_screen, recovery_user, recovery_color, recovery_restaurant, username_attempt, color_attempt, restaurant_attempt
 
     recovery_screen = Toplevel(screen)
     recovery_screen.title("Forgot Password")
     recovery_screen.geometry("400x350")
 
-    verify_user = StringVar()
-    verify_color = StringVar()
-    verify_restaurant = StringVar()
+    recovery_user = StringVar()
+    recovery_color = StringVar()
+    recovery_restaurant = StringVar()
     
     Label(recovery_screen, text="Please enter the username").pack()
     Label(recovery_screen, text="").pack()
-    username_attempt = Entry(recovery_screen, textvariable = verify_user).pack()
+    username_attempt = Entry(recovery_screen, textvariable = recovery_user).pack()
     
-    Label(recovery_screen, text"What is your favorite color?").pack()
+    Label(recovery_screen, text="What is your favorite color?").pack()
     Label(recovery_screen, text="").pack()
-    color_attempt = Entry(recovery_screen, textvariable = verify_color).pack()
+    color_attempt = Entry(recovery_screen, textvariable = recovery_color).pack()
 
-    Label(recovery_screen, text"What is your favorite restaurant?").pack()
+    Label(recovery_screen, text="What is your favorite restaurant?").pack()
     Label(recovery_screen, text="").pack()
-    restaurant_attempt = Entry(recovery_screen, textvariable = verify_restaurant).pack()
+    restaurant_attempt = Entry(recovery_screen, textvariable = recovery_restaurant).pack()
 
     Label(recovery_screen, text="").pack()
 
-    Button(recovery_screen, text="Recover My Password", width=15, height=1, command = recoverPasswordVerify()).pack()
+    Button(recovery_screen, text="Recover My Password", width=15, height=1, command = recoverPasswordVerify).pack()
     
 
 #Login Info Page

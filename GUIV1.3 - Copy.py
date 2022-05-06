@@ -91,6 +91,17 @@ def newPasswordNotValid():
     Label(password_error_screen, text= "One of the following was no met:\nLength less than 7\nNo Capital Letter\nNo Number\nNo Special Character").pack()
     Button(password_error_screen, text= "OK", command=delete_pass_error_window).pack()
 
+def deleteUsernameTakenErrorWindow():
+    username_error_screen.destroy()
+
+def usernameTaken():
+    global username_error_screen
+    username_error_screen = Toplevel(screen)
+    username_error_screen.title("Error")
+    username_error_screen.geometry("300x100")
+    Label(username_error_screen, text="That username is taken").pack()
+    Button(username_error_screen, text="OK", command=deleteUsernameTakenErrorWindow).pack()
+
 #Creates Accounts.txt if it does not exist withing directory and stores new account info
 #Also creates Security text file under the new user's name and displays success message when completed
 def register_user():
@@ -99,18 +110,28 @@ def register_user():
     color_info = color.get()
     restaurant_info = restaurant.get()
 
-    tmp = createPassword(username_info,password_info)
-    if(tmp != True):
-        newPasswordNotValid()
+    with open("Accounts.txt", 'r') as file:
+        data = file.readlines()
+    found = False
+    for line in data:
+        if line.strip() == username_info:
+            found = True
+            break
+    if found == True:
+        usernameTaken()
     else:
-        main.SecurityQuestionAnswers(username_info, color_info, restaurant_info)
-        userData = username_info + "Data.txt"
-        userData = os.path.join(relativePath, userData)
-        tmp = open(userData,'w')
-        tmp.close()
-        #closes registration window and displays success message
-        registration_screen.destroy()
-        messagebox.showinfo(title="Success!", message="Account successfully created!")
+        tmp = createPassword(username_info,password_info)
+        if(tmp != True):
+            newPasswordNotValid()
+        else:
+            main.SecurityQuestionAnswers(username_info, color_info, restaurant_info)
+            userData = username_info + "Data.txt"
+            userData = os.path.join(relativePath, userData)
+            tmp = open(userData,'w')
+            tmp.close()
+            #closes registration window and displays success message
+            registration_screen.destroy()
+            messagebox.showinfo(title="Success!", message="Account successfully created!")
 
 #Account Creation Page
 #User is prompted to enter a username, password, favorite color(Security question 1), and favorite restaurant(Security question 2)
@@ -146,10 +167,13 @@ def end_program():
 #Logs the current user out of the program and returns to the main screen
 #CURRENTLY UNDEFINED
 def log_out():
-    print()
+    user_portal.destroy()
 
 #Enters the main user dashboard after a successful login process
 def enter_user_portal():
+    #Maybe try w/o global, using to destroy on logout 
+    global user_portal
+    
     user_portal = Toplevel(screen)
     user_portal.title(username_check + "'s Dashboard")
     user_portal.geometry("400x400")

@@ -87,8 +87,8 @@ def newPasswordNotValid():
     global password_error_screen
     password_error_screen = Toplevel(screen)
     password_error_screen.title("Error")
-    password_error_screen.geometry("300x100")
-    Label(password_error_screen, text= "One of the following was no met:\nLength less than 7\nNo Capital Letter\nNo Number\nNo Special Character").pack()
+    password_error_screen.geometry("300x150")
+    Label(password_error_screen, text= "One of the following was not met:\nLength less than 7\nNo Capital Letter\nNo Number\nNo Special Character").pack()
     Button(password_error_screen, text= "OK", command=delete_pass_error_window).pack()
 
 def deleteUsernameTakenErrorWindow():
@@ -161,11 +161,12 @@ def register():
     restaurant_entry = Entry(registration_screen, textvariable= restaurant).pack()
     Label(registration_screen, text= "").pack()
     Button(registration_screen, text = "Register", width= 10, height=1, command=register_user).pack()
+
+#Destroys main screen, terminating the program
 def end_program():
     screen.destroy()
 
 #Logs the current user out of the program and returns to the main screen
-#CURRENTLY UNDEFINED
 def log_out():
     user_portal.destroy()
 
@@ -178,7 +179,6 @@ def enter_user_portal():
     user_portal.title(username_check + "'s Dashboard")
     user_portal.geometry("400x400")
     login_screen.destroy()
-    #Will try figure out how to hide main screen as well
 
     #Display user options
     Button(user_portal, text = "View My Passwords", width= 25, height=1, command=display_info).pack()
@@ -390,6 +390,7 @@ def recover_password():
     recovery_color = StringVar()
     recovery_restaurant = StringVar()
     
+    Label(recovery_screen, text="").pack()
     Label(recovery_screen, text="Please enter the username").pack()
     Label(recovery_screen, text="").pack()
     username_attempt = Entry(recovery_screen, textvariable = recovery_user).pack()
@@ -404,7 +405,7 @@ def recover_password():
 
     Label(recovery_screen, text="").pack()
 
-    Button(recovery_screen, text="Recover My Password", width=15, height=1, command = recoverPasswordVerify).pack()
+    Button(recovery_screen, text="Recover My Password", width=20, height=1, command = recoverPasswordVerify).pack()
     
 
 #Login Info Page

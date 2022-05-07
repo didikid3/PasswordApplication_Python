@@ -140,6 +140,7 @@ def register():
     registration_screen = Toplevel(screen)
     registration_screen.title("Create Account")
     registration_screen.geometry("400x350")
+    registration_screen.configure(bg="#3380FF")
 
     global username, username_entry, password, password_entry, color, color_entry, restaurant, restaurant_entry
     username = StringVar()
@@ -147,20 +148,20 @@ def register():
     color = StringVar()
     restaurant = StringVar()
 
-    Label(registration_screen, text= "Please enter your details below.").pack()
-    Label(registration_screen, text= "").pack()
-    Label(registration_screen, text= "Username").pack()
+    Label(registration_screen, text= "Please enter your details below.", bg="#3380FF").pack()
+    Label(registration_screen, text= "", bg="#3380FF").pack()
+    Label(registration_screen, text= "Username", bg="#3380FF").pack()
     username_entry = Entry(registration_screen, textvariable= username).pack()
-    Label(registration_screen, text= "Password").pack()
+    Label(registration_screen, text= "Password", bg="#3380FF").pack()
     password_entry = Entry(registration_screen, textvariable= password).pack()
-    Label(registration_screen, text= "").pack()
-    Label(registration_screen, text= "Security Questions").pack()
-    Label(registration_screen, text= "What is your favorite color?").pack()
+    Label(registration_screen, text= "", bg="#3380FF").pack()
+    Label(registration_screen, text= "Security Questions", bg="#3380FF").pack()
+    Label(registration_screen, text= "What is your favorite color?", bg="#3380FF").pack()
     color_entry = Entry(registration_screen, textvariable= color).pack()
-    Label(registration_screen, text= "What is your favorite restaurant?").pack()
+    Label(registration_screen, text= "What is your favorite restaurant?", bg="#3380FF").pack()
     restaurant_entry = Entry(registration_screen, textvariable= restaurant).pack()
-    Label(registration_screen, text= "").pack()
-    Button(registration_screen, text = "Register", width= 10, height=1, command=register_user).pack()
+    Label(registration_screen, text= "", bg="#3380FF").pack()
+    Button(registration_screen, text = "Register", width= 10, height=1, highlightbackground="#3380FF", command=register_user).pack()
 
 #Destroys main screen, terminating the program
 def end_program():
@@ -178,18 +179,23 @@ def enter_user_portal():
     user_portal = Toplevel(screen)
     user_portal.title(username_check + "'s Dashboard")
     user_portal.geometry("400x400")
+    user_portal.configure(bg="#3380FF")
     login_screen.destroy()
 
     #Display user options
-    Button(user_portal, text = "View My Passwords", width= 25, height=1, command=display_info).pack()
-    Button(user_portal, text = "Log Out", width= 25, height=1, command=log_out).pack()
-    Button(user_portal, text = "Close Program", width= 25, height=1, command=end_program).pack()
+    Label(user_portal, text="", bg="#3380FF").pack()
+    Label(user_portal, text="", bg="#3380FF").pack()
+    Label(user_portal, text="", bg="#3380FF").pack()
+    Button(user_portal, text = "View My Passwords", width= 25, height=1, highlightbackground="#3380FF", command=display_info).pack(pady=20)
+    Button(user_portal, text = "Log Out", width= 10, height=1, highlightbackground="#3380FF", command=log_out).pack(pady=20)
+    Button(user_portal, text = "Close Program", width= 20, height=1, highlightbackground="#3380FF", command=end_program).pack(pady=20)
 #Displays new window with current user's password data
 def display_info():
     global user_information_screen, entry_counter
     user_information_screen = Toplevel(screen)
     user_information_screen.title("Your Data")
     user_information_screen.geometry("800x800")
+    user_information_screen.configure(bg="#3380FF")
     info_tree = ttk.Treeview(user_information_screen)
     entry_counter = 0
     #Define columns
@@ -248,19 +254,20 @@ def display_info():
             info_tree.delete(record)
             entry_counter -= 1
         
-
+    def go_home():
+        user_information_screen.destroy()
         
     #Add Entry Frame
-    add_frame = Frame(user_information_screen)
+    add_frame = Frame(user_information_screen, bg="#3380FF")
     add_frame.pack(pady=20)
     #Entry Box labels
-    app_label = Label(add_frame, text="Application")
+    app_label = Label(add_frame, text="Application", bg="#3380FF")
     app_label.grid(row=0, column=0)
 
-    user_label = Label(add_frame, text="Username")
+    user_label = Label(add_frame, text="Username", bg="#3380FF")
     user_label.grid(row=0, column=1)
 
-    pass_label = Label(add_frame, text="Password")
+    pass_label = Label(add_frame, text="Password", bg="#3380FF")
     pass_label.grid(row=0, column=2)
 
     #Entry Boxes
@@ -274,12 +281,14 @@ def display_info():
     pass_box.grid(row=1, column=2)
 
     #Buttons
-    add_record = Button(user_information_screen, text="Add Record", command=add_record)
+    add_record = Button(user_information_screen, text="Add Record", highlightbackground="#3380FF", command=add_record)
     add_record.pack(pady=20)
-    clear_records = Button(user_information_screen, text="Clear All Data", command=clear_records)
+    clear_records = Button(user_information_screen, text="Clear All Data", highlightbackground="#3380FF", command=clear_records)
     clear_records.pack(pady=10)
-    remove_selected = Button(user_information_screen, text="Remove Selected", command=remove_selected)
+    remove_selected = Button(user_information_screen, text="Remove Selected", highlightbackground="#3380FF", command=remove_selected)
     remove_selected.pack(pady=10)
+    go_home = Button(user_information_screen, text="Back to Dashboard", highlightbackground="#3380FF", command=go_home)
+    go_home.pack(pady=30)
 
 #Deletes username error popup
 def delete_user_error_window():
@@ -385,27 +394,28 @@ def recover_password():
     recovery_screen = Toplevel(screen)
     recovery_screen.title("Forgot Password")
     recovery_screen.geometry("400x350")
+    recovery_screen.configure(bg="#3380FF")
 
     recovery_user = StringVar()
     recovery_color = StringVar()
     recovery_restaurant = StringVar()
     
-    Label(recovery_screen, text="").pack()
-    Label(recovery_screen, text="Please enter the username").pack()
-    Label(recovery_screen, text="").pack()
+    Label(recovery_screen, text="", bg="#3380FF").pack()
+    Label(recovery_screen, text="Please enter the username", bg="#3380FF").pack()
+    Label(recovery_screen, text="", bg="#3380FF").pack()
     username_attempt = Entry(recovery_screen, textvariable = recovery_user).pack()
     
-    Label(recovery_screen, text="What is your favorite color?").pack()
-    Label(recovery_screen, text="").pack()
+    Label(recovery_screen, text="What is your favorite color?", bg="#3380FF").pack()
+    Label(recovery_screen, text="", bg="#3380FF").pack()
     color_attempt = Entry(recovery_screen, textvariable = recovery_color).pack()
 
-    Label(recovery_screen, text="What is your favorite restaurant?").pack()
-    Label(recovery_screen, text="").pack()
+    Label(recovery_screen, text="What is your favorite restaurant?", bg="#3380FF").pack()
+    Label(recovery_screen, text="", bg="#3380FF").pack()
     restaurant_attempt = Entry(recovery_screen, textvariable = recovery_restaurant).pack()
 
-    Label(recovery_screen, text="").pack()
+    Label(recovery_screen, text="", bg="#3380FF").pack()
 
-    Button(recovery_screen, text="Recover My Password", width=20, height=1, command = recoverPasswordVerify).pack()
+    Button(recovery_screen, text="Recover My Password", width=20, height=1, highlightbackground="#3380FF", command = recoverPasswordVerify).pack()
     
 
 #Login Info Page
@@ -413,22 +423,23 @@ def recover_password():
 def login():
     global login_screen, verify_user, verify_password, username_login_attempt, password_login_attempt
     login_screen = Toplevel(screen)
+    login_screen.configure(bg="#3380FF")
     login_screen.title("Log In Window")
     login_screen.geometry("400x350")
 
     verify_user = StringVar()
     verify_password = StringVar()
 
-    Label(login_screen, text= "Please enter your details to log in.").pack()
-    Label(login_screen, text= "").pack()
-    Label(login_screen, text= "Username").pack()
+    Label(login_screen, text= "Please enter your details to log in.", bg="#3380FF").pack()
+    Label(login_screen, text= "", bg="#3380FF").pack()
+    Label(login_screen, text= "Username", bg="#3380FF").pack()
     username_login_attempt = Entry(login_screen, textvariable= verify_user).pack()
-    Label(login_screen, text= "").pack()
-    Label(login_screen, text= "Password").pack()
+    Label(login_screen, text= "", bg="#3380FF").pack()
+    Label(login_screen, text= "Password", bg="#3380FF").pack()
     password_login_attempt = Entry(login_screen, textvariable= verify_password).pack()
-    Label(login_screen, text= "").pack()
-    Button(login_screen, text = "Log In", width= 10, height=1, command=verify_login).pack()
-    Button(login_screen, text = "Forgot Password?", width= 15, height=1, command=recover_password).pack()
+    Label(login_screen, text= "", bg="#3380FF").pack()
+    Button(login_screen, text = "Log In", width= 10, height=1, highlightbackground="#3380FF", command=verify_login).pack()
+    Button(login_screen, text = "Forgot Password?", width= 15, height=1, highlightbackground="#3380FF", command=recover_password).pack()
 
 #Main Program Window with Login and Register buttons
 def main_window():
@@ -440,12 +451,16 @@ def main_window():
     screen = Tk()
     screen.geometry("400x350")
     screen.title("Password Management")
-    Label(text="Welcome to Password Management V1.3!", width="300", height="2").pack()
-    Label(text="").pack()
-    Button(text="Login", height="2", width="30", command=login).pack()
-    Label(text="").pack()
-    Button(text="Create Account", height="2", width="30", command=register).pack()
-
+    screen.configure(bg="#3380FF")
+    Label(text="Welcome to Password Management!", width="300", height="2", bg= "#3380FF", font=("System", 18)).pack()
+    Label(text="", bg="#3380FF").pack()
+    main_window_frame = Frame(screen, bg="#3380FF")
+    main_window_frame.pack()
+    mw1 = Button(main_window_frame, text="Login", height="2", width="30", highlightbackground="#3380FF", command=login)
+    mw1.grid(row=0, column=0)
+    Label(text="", bg="#3380FF").pack()
+    mw2 = Button(main_window_frame, text="Create Account", height="2", width="30", highlightbackground="#3380FF", command=register)
+    mw2.grid(row=1, column=0)
     screen.mainloop()
 
 main_window()

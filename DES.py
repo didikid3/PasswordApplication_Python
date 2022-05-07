@@ -188,7 +188,7 @@ final_perm = [ 40, 8, 48, 16, 56, 24, 64, 32,
  
 def encrypt(pt, rkb, rk):
     pt = hex2bin(pt)
-     
+
     # Initial Permutation
     pt = permute(pt, initial_perm, 64)
          
@@ -350,9 +350,11 @@ def DES2Decrypt(cipher_text, userKey):
         rk.append(bin2hex(round_key))
      
          
-    
+
     rkb_rev = rkb[::-1]
     rk_rev = rk[::-1]
+    
+    #print(encrypt(cipher_text, rkb_rev, rk_rev))
     text = bin2hex(encrypt(cipher_text, rkb_rev, rk_rev))
     
     return text
@@ -384,9 +386,18 @@ def removePadding(text):
     return result
 
 def decryptHelper(cipher_text, key):
-    plainHex = DES2Decrypt(cipher_text,key)
+    size = len(cipher_text)
+    recur = int(size/16)
+
+    plainHex=''
+    for i in range(recur):
+        plainHex += DES2Decrypt(cipher_text[i*16: (i+1)*16],key)
 
     pt = bytes.fromhex(plainHex).decode('utf-8')
+
     return removePadding(pt)
+
+key = "AABB09182736CCDD"
+decryptHelper("EE522972D09E2235A795D800E181DBDB", key)
 
 

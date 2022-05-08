@@ -8,6 +8,7 @@ import homepage
 import main
 import DES
 
+#creates path 
 relativePath = os.path.join(os.path.dirname(__file__), 'users')
 key = "AABB09182736CCDD"
 
@@ -17,18 +18,22 @@ def userNameIndex(username):
     usernameLocation = 0
 
     for line in data:
+        #check if the line is a username or not
         if line.strip() == username:
             found = True
             break
         usernameLocation += 1
+
+    #User Location index 
     return usernameLocation
 
 def createPassword(username,passwordUser):
-
+    #strings for alphabet uppercase, special characters, special Numbers 
     stringOfalph = "abcdefghijklmnopqrstuvwxyz".upper()
     stringOfSpecial = "!@#$%^&*()"
     stringOfNum = "0123456789"
 
+    #Boolean to check if user enters one of them
     boolForNum = False
     boolForSpec = False
     boolForCap = False
@@ -54,7 +59,9 @@ def createPassword(username,passwordUser):
 
     if len(password) < 7:
         return False
-    if boolForCap != True and boolForNum != True and boolForSpec != True:
+
+    #check for users input on password
+    if boolForCap != True or boolForNum != True or boolForSpec != True:
         return False
 
 
@@ -77,6 +84,7 @@ def createPassword(username,passwordUser):
         data[usernameLocation + 1] = password
 
     #Write data back to file
+    #overides entire file with new data
     with open("Accounts.txt", 'w') as file:
         file.writelines(data)
 
@@ -105,6 +113,7 @@ def usernameTaken():
 #Creates Accounts.txt if it does not exist withing directory and stores new account info
 #Also creates Security text file under the new user's name and displays success message when completed
 def register_user():
+    #retirves content of the text box
     username_info = username.get()
     password_info = password.get()
     color_info = color.get()
@@ -444,7 +453,8 @@ def login():
 #Main Program Window with Login and Register buttons
 def main_window():
     global screen
-    
+
+    #if user folder does nto exist create it 
     if not os.path.exists(relativePath):
         os.makedirs(relativePath)
     
